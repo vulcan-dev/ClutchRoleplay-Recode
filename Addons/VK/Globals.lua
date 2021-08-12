@@ -9,5 +9,6 @@ function GWLog(message, ...) message = tostring(string.format('[ WARN]: %s', mes
 function GELog(message, ...) message = tostring(string.format('[ ERROR]: %s', message)) GLog(message, ...) end
 function GFLog(message, ...) message = tostring(string.format('[ FATAL]: %s', message)) GLog(message, ...) end
 
---[[ Client ]]--
+--[[ Variables ]]--
 GClients = {}
+GCommands = {}
