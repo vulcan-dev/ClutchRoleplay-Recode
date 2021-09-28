@@ -1,5 +1,12 @@
 *.exe
 .dccache
 
+# Extensions
+VK-Roleplay
+
+# Other Folders
+Mods
+
+# JSON
 Players.json
 Config.json
