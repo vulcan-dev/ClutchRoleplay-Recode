@@ -11,7 +11,7 @@ local function OnPlayerDisconnected(clientID)
 end
 
 local function OnChat(clientID, message)
-
+    GDLog('VK-AntiCheat : OnChat')
 end
 
 Callbacks.Callbacks = {

@@ -1,0 +1,2 @@
+All addons can require modules from here
+Also, all lua files will be "injected" into the client.
