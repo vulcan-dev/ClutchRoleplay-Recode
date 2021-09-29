@@ -63,7 +63,9 @@ end
 
 --[[ Variables ]]--
 GClients = {}
+GClientCount = 0
 GCommands = {}
+GExtensions = {}
 GProduction = nil
 
 GLevels = {

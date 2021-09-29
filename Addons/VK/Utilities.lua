@@ -15,7 +15,7 @@ local function FileToJSON(path)
 end
 
 local function LoadExtension(name)
-    return Include(string.format('Addons.VK.Server.Extensions.%s.Callbacks', name))
+    return Include(string.format('Addons.VK.Server.Extensions.%s.%s', name, name:sub(4)))
 end
 
 Utilities.GetColour = GetColour

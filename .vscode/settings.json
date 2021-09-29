@@ -1,6 +1,11 @@
 {
     "Lua.diagnostics.globals": [
         "decode_json",
-        "hooks"
+        "hooks",
+        "connections",
+        "encode_json_pretty"
+    ],
+    "Lua.diagnostics.disable": [
+        "empty-block"
     ]
 }

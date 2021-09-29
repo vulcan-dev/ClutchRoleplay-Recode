@@ -4,7 +4,7 @@
     "CommandPrefix": "/",
 
     "Logging": {
-        "FileLogging": true,
+        "FileLogging": false,
         "DefaultLogLevel": "Debug",
         "DefaultFileLogLevel": "Debug"
     },

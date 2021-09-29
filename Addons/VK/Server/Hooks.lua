@@ -25,8 +25,8 @@ local function Register(hook, subname, callback)
     end
 end
 
-local function Call(hook)
-    if Hooks.CustomHooks[hook] then Hooks.CustomHooks[hook]() end
+local function Call(hook, ...)
+    if Hooks.CustomHooks[hook] then Hooks.CustomHooks[hook](...) end
 end
 
 Hooks.Register = Register

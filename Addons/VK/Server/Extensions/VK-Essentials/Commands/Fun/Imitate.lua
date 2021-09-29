@@ -1,3 +1,0 @@
-local Command = {}
-
-return Command

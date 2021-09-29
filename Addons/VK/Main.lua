@@ -1,11 +1,12 @@
 require('Addons.VK.Globals')
 
-Hooks = require('Addons.VK.Server.Hooks')
-Utilities = require('Addons.VK.Utilities')
-
 local _Extensions = {}
 
 local function Setup()
+    Hooks = Include('Addons.VK.Server.Hooks')
+    Utilities = Include('Addons.VK.Utilities')
+    Callbacks = Include('Addons.VK.Callbacks')
+
     --[[ Setup Server Settings ]]--
     local Server = Utilities.FileToJSON('Addons\\VK\\Settings\\Server.json')
     GLevel = GLevels[Server['Logging']['DefaultLogLevel']]
@@ -18,8 +19,9 @@ local function Setup()
     if GFileLogging then GLogFile = string.format('Development (%s).log', GStartupTime) end
 
     --[[ Load Extensions ]]--
-    local Extensions = Utilities.FileToJSON('Addons\\VK\\Settings\\Extensions.json')['Extensions']
-    for _, extension in ipairs(Extensions) do
+    GExtensions = Utilities.FileToJSON('Addons\\VK\\Settings\\Extensions.json')['Extensions']
+    for _, extension in ipairs(GExtensions) do
+        GExtensions[extension] = 1
         _Extensions[extension] = Utilities.LoadExtension(extension)
         GILog('Loaded Extension: %s', extension)
     end
@@ -30,6 +32,11 @@ local function Setup()
             Hooks.Register(callbackName, name, callback)
         end
     end
+
+    --[[ Shared Callbacks ]]--
+    Hooks.Register('OnChat', 'OnChatCallback', Callbacks.OnChat)
+    Hooks.Register('OnPlayerConnected', 'OnPlayerConnectedCallback', Callbacks.OnPlayerConnected)
+    Hooks.Register('OnPlayerDisconnected', 'OnPlayerDisconnectedCallback', Callbacks.OnPlayerDisconnected)
 end
 
 --[[ Local Functions ]]--
