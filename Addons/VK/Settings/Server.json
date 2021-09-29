@@ -1,5 +1,13 @@
 {
     "KickUnknown": true,
     "AutoWhitelist": true,
-    "CommandPrefix": "/"
+    "CommandPrefix": "/",
+
+    "Logging": {
+        "FileLogging": true,
+        "DefaultLogLevel": "Debug",
+        "DefaultFileLogLevel": "Debug"
+    },
+
+    "Production": false
 }
