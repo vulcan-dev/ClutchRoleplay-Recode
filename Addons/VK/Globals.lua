@@ -76,6 +76,26 @@ GLevels = {
     Fatal = 4
 }
 
+GErrorInvalidUser = 0
+GErrorInvalidArguments = 1
+GErrorInvalidMessage = 2
+GErrorVehicleBlacklisted = 3
+GErrorInvalidVehiclePermissions = 4
+GErrorInsufficentPermissions = 5
+GErrorCannotPerformUser = 6
+GErrorNotInVehicle = 7
+
+GErrors = {
+    [GErrorInvalidUser] = 'Invalid user specified',
+    [GErrorInvalidArguments] = 'Invalid arguments',
+    [GErrorInvalidMessage] = 'Invalid message specified',
+    [GErrorVehicleBlacklisted] = 'This vehicle is blacklisted',
+    [GErrorInvalidVehiclePermissions] = 'You do not have the required permissions to drive this vehicle',
+    [GErrorInsufficentPermissions] = 'You do not have the required permissions to perform this action',
+    [GErrorCannotPerformUser] = 'You do not have the required permissions to perform this action on this user',
+    [GErrorNotInVehicle] = 'User is not in a vehicle'
+}
+
 GLevel = nil
 GLogLevel = nil
 GLogFileLevel = nil

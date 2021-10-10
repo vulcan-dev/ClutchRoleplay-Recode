@@ -49,11 +49,17 @@ local function Initialise()
     hooks.register('OnStdIn', 'ReloadModules', function()
         GILog('Reloading Modules')
         Setup()
+
+        Server.Initialize()
+        for extension, _ in pairs(GExtensions) do
+            if GExtensions[extension].Initialize then GExtensions[extension].Initialize() end
+        end
     end)
 
     --[[ Set Include Paths ]]--
     AddPath('Addons/VK')
     AddPath('Addons/VK/Server')
+    AddPath('Addons/VK/Server/Extensions/VK-Essentials/Commands')
 
     --[[ Initialize Everything Else ]]--
     Server.Initialize()

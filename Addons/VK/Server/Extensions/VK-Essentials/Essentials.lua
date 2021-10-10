@@ -2,7 +2,14 @@ local Essentials = {}
 
 require('Addons.VK.Globals')
 
-local Callbacks = require('Addons.VK.Server.Extensions.VK-Essentials.Callbacks')
+local Callbacks = Include('Addons.VK.Server.Extensions.VK-Essentials.Callbacks')
+Essentials.Utilities = Include('Addons.VK.Server.Extensions.VK-Essentials.Utilities')
+
+local function Initialize()
+    --[[ Initialize all Commmands ]]--
+    local commands = Utilities.GetCommands('VK-Essentials')
+    Utilities.AddCommandTable(commands)
+end
 
 local function GenerateClient(client)
     --[[ Accessors ]]--
@@ -53,6 +60,7 @@ local function CreateClientData(client)
     return client
 end
 
+Essentials.Initialize = Initialize
 Essentials.GenerateClient = GenerateClient
 Essentials.CreateClientData = CreateClientData
 Essentials.Callbacks = Callbacks
