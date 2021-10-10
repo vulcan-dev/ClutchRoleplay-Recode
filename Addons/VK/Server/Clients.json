@@ -1,5 +1,16 @@
 {
   "5a3e1ef352cf948e30c1d34d40046810781e8fc1": {
-    "Rank": 1.0
+    "Aliases": [],
+    "Bans": [],
+    "BlockList": [],
+    "Characters": [],
+    "Detections": [],
+    "Home": [],
+    "Kicks": [],
+    "Mutes": [],
+    "Playtime": 0.0,
+    "Rank": 0.0,
+    "VehicleLimit": 2.0,
+    "Warnings": []
   }
 }

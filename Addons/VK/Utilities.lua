@@ -11,7 +11,16 @@ local function GetColour(colour)
 end
 
 local function FileToJSON(path)
-    return decode_json(io.open(path, 'r'):read('*a'))
+    local file = io.open(path, 'r')
+    local data = decode_json(file:read('*a'))
+    file:close()
+    return data
+end
+
+local function JSONToFile(path, jsonData)
+    local file = io.open(path, 'w+')
+    file:write(encode_json_pretty(jsonData))
+    file:close()
 end
 
 local function LoadExtension(name)
@@ -20,6 +29,7 @@ end
 
 Utilities.GetColour = GetColour
 Utilities.FileToJSON = FileToJSON
+Utilities.JSONToFile = JSONToFile
 Utilities.LoadExtension = LoadExtension
 
 return Utilities

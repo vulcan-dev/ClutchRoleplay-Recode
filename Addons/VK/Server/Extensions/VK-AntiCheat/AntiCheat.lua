@@ -4,8 +4,11 @@ require('Addons.VK.Globals')
 
 local Callbacks = require('Addons.VK.Server.Extensions.VK-Essentials.Callbacks')
 
-local function CreateClientData(clientID, client)
 
+local function CreateClientData(client)
+    GDLog('VK-AntiCheat : Creating Client Data')
+
+    client['Detections'] = {}
 
     return client
 end
