@@ -5,18 +5,20 @@ require('Addons.VK.Globals')
 Server = Include('Addons.VK.Server.Server')
 
 local function OnPlayerConnected(clientID)
-    --[[ Shared OnPlayerConnected ]]--
+    --[[ Shared OnChat ]]--
     Server.RegisterClient(clientID)
 end
 
 local function OnPlayerDisconnected(clientID)
-    --[[ Shared OnPlayerDisconnected ]]--
+    --[[ Shared OnChat ]]--
     Server.DestroyClient(clientID)
 end
 
 local function OnChat(clientID, message)
     --[[ Shared OnChat ]]--
-    
+    if GExtensions['VK-Essentials'] then
+        return ''
+    end
 
     return message
 end
