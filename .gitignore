@@ -1,5 +1,11 @@
 *.exe
 .dccache
+*.log
+Clients.json
+server
+kissmp-bridge
+bridge-broken?
+.vscode/settings.json
 
 # Extensions
 VK-Roleplay

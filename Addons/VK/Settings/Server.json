@@ -9,5 +9,6 @@
         "DefaultFileLogLevel": "Debug"
     },
 
-    "Production": false
+    "Production": false,
+    "BeamMPCompat": false
 }

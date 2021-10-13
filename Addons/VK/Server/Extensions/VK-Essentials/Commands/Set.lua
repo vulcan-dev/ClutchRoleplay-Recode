@@ -42,11 +42,11 @@ Command.Execute = function(executor, arguments)
         local colours = Utilities.ParseCommand(colour, ':')
         colours = Utilities.ConvertColour(colours)
 
-        local colourJson = Utilities.FileToJSON('Addons\\VK\\Settings\\Colours.json')
+        local colourJson = Utilities.FileToJSON('Addons/VK/Settings/Colours.json')
         if colourJson['Ranks'][rank] then
             colourJson['Ranks'][rank].r = colours.r
 
-            Utilities.JSONToFile('Addons\\VK\\Settings\\Colours.json', colourJson)
+            Utilities.JSONToFile('Addons/VK/Settings/Colours.json', colourJson)
         end
     else if type == TypeExtension then
 

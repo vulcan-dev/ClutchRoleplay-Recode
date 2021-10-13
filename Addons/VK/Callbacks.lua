@@ -9,26 +9,40 @@ local function OnPlayerConnected(clientID)
     Server.RegisterClient(clientID)
     local client = GClients[clientID]
     
-    Server.DisplayDialog(client.udata:getName() .. ' has Connected!')
+    Server.DisplayDialog(client.GetName() .. ' has Connected!')
+
+    --[[ Debugging ]]--
+    GDLog('Connect')
+    GDLog('ClientCount: %d', GClientCount)
+    for k, v in pairs(GClients) do
+        GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
+    end
 end
 
 local function OnPlayerDisconnected(clientID)
     --[[ Shared OnChat ]]--
     local client = GClients[clientID]
 
-    Server.DisplayDialog(client.udata:getName() .. ' has Left.')
+    Server.DisplayDialog(client.GetName() .. ' has Left.')
     Server.DestroyClient(clientID)
+
+    --[[ Debugging ]]--
+    GDLog('Disconnect')
+    GDLog('ClientCount: %d', GClientCount)
+    for k, v in pairs(GClients) do
+        GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
+    end
 end
 
-local function OnChat(clientID, message)
+local function OnChat(clientID, message, console)
     --[[ Shared OnChat ]]--
     local client = GClients[clientID]
     if GExtensions['VK-Essentials'] then
         --[[ Check if Command ]]--
         if string.sub(message, 1, 1) == Server.GetCommandPrefix() then
             local arguments = Utilities.ParseCommand(message, ' ')
-            arguments[1] = string.lower(arguments[1]:sub(2))
-
+            arguments[1] = string.lower(arguments[1]:sub(1))
+            
             local command = GCommands[arguments[1]]
 
             --[[ Check for Command Alias Instead ]]--
@@ -79,8 +93,13 @@ local function OnChat(clientID, message)
     return message
 end
 
+local function OnStdIn(message)
+    Callbacks.OnChat(GConsoleID, message, true)
+end
+
 Callbacks.OnChat = OnChat
 Callbacks.OnPlayerConnected = OnPlayerConnected
 Callbacks.OnPlayerDisconnected = OnPlayerDisconnected
+Callbacks.OnStdIn = OnStdIn
 
 return Callbacks

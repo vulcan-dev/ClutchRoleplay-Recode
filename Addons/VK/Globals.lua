@@ -10,11 +10,11 @@ function GWriteToFile(path, ...)
 end
 
 function GLog(message, level, ...)
-    if level >= GLevel then print(string.format('[%s]  [kissmp_server:vk] %s', DateTime(), string.format(message, ...))) end
-    if ... then message = message .. ... message = string.format(message, ...) end
-    message = message .. '\n'
+    local output = string.format('[%s]  [kissmp_server:vk] %s', DateTime(), string.format(message, ...))
+    if level >= GLevel then print(output) end
+    output = output .. '\n'
 
-    if GFileLogging and level >= GLogFileLevel then GWriteToFile(string.format('Addons\\VK\\Server\\Logs\\%s\\%s', GLogFilePath, GLogFile), tostring(message)) end
+    if GFileLogging and level >= GLogFileLevel then GWriteToFile(string.format('Addons/VK/Server/Logs/%s/%s', GLogFilePath, GLogFile), output) end
 end
 
 function GDLog(message, ...) message = tostring(string.format('[ DEBUG]: %s', message)) GLog(message, GLevels['Debug'], ...) end
@@ -67,6 +67,7 @@ GClientCount = 0
 GCommands = {}
 GExtensions = {}
 GProduction = nil
+GBeamMPCompat = nil
 
 GLevels = {
     Debug = 0,
@@ -102,3 +103,6 @@ GLogFileLevel = nil
 GLogFilePath = nil
 GLogFile = nil
 GStartupTime = nil
+
+GConsoleID = 0
+GServerInitialized = false

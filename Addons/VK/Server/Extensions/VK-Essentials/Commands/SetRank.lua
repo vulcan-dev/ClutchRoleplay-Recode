@@ -7,7 +7,7 @@ Command.Category = VKUtilities.CategoryUtilities
 Command.Description = 'Set a Users Rank'
 Command.Alias = 'set_rank'
 Command.Execute = function(executor, arguments)
-    local client = VKUtilities.GetUser(arguments[1])
+    local client = Server.GetUser(arguments[1])
     local rank = arguments[2]
 
     if not client then return GErrorInvalidUser end

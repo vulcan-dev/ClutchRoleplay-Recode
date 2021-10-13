@@ -36,7 +36,7 @@ end
 local function LuaStringEscape(str, q)
     local escapeMap = {
         ["\n"] = [[\n]],
-        ["\\"] = [[\]]
+        ["/"] = [[\]]
     }
 
     local qOther = nil
@@ -84,7 +84,7 @@ local function ParseCommand(cmd, sep)
             escape_sequence_stack = escape_sequence_stack + 1
         end
         local in_escape_sequence = escape_sequence_stack > 0
-        if char == "\\" then
+        if char == "/" then
             escape_sequence_stack = 1
         elseif char == sep and not in_quotes then
             table.insert(parts, cur_part)
@@ -109,12 +109,14 @@ local function GetCommands(extensionName)
     local commands = {}
 
     --[[ Get all Files ]]--
-    local files = io.popen(string.format('dir .\\Addons\\VK\\Server\\Extensions\\%s\\Commands\\*.lua', extensionName))
+    local files = io.popen(string.format('dir ./Addons/VK/Server/Extensions/%s/Commands/*.lua', extensionName))
     for file in files:lines() do
         --[[ Get Lua File ]]
-        last = string.match(file, "%s(%S+).lua$")
+        -- last = string.match(file, "%s(%S+).lua$")
+        local include = string.match(file, "Commands/(%S+).lua")
+        last = string.match(file, "/(%S+).lua$"):gsub('/', '.')
         if last ~= nil then
-            commands[string.lower(last)] = Include(string.format('Addons.VK.Server.Extensions.%s.Commands.%s', extensionName, last))
+            commands[string.lower(include)] = Include(last)
         end
     end
 

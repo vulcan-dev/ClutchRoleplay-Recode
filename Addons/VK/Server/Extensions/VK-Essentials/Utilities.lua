@@ -35,8 +35,8 @@ local function SendUserMessage(executor, message, prefix)
     prefix = prefix or ''
 
     local rankString = StrRanks[executor.GetRank()]
-    local rankColour = Utilities.FileToJSON('Addons\\VK\\Settings\\Colours.json')['Ranks'][rankString]
-    local output = string.format('[%s] %s: %s', rankString, executor.udata:getName(), message)
+    local rankColour = Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Ranks'][rankString]
+    local output = string.format('[%s] %s: %s', rankString, executor.GetName(), message)
 
     Server.SendChatMessage(output, Utilities.ConvertColour(rankColour))
 end
@@ -56,28 +56,6 @@ local function GetMessage(arguments, start)
     return message
 end
 
-local function GetUser(identifier)
-    if not identifier then return nil end
-
-    for _, client in pairs(GClients) do
-        if identifier == client.udata:getName() then
-            return client
-        else if identifier == client.udata:getID() then
-            return client
-        else if identifier == client.udata:getSecret() then
-            return client
-        else if identifier == client.mid then
-            return client
-        else if string.find(client.udata:getName(), identifier) then
-            return client
-        else if string.find(string.lower(client.udata:getName()), identifier) then
-            return client
-        end end end end end end
-    end
-
-    return nil
-end
-
 --[[ Ranks ]]--
 VKUtilities.RankUser = RankUser
 VKUtilities.RankTrusted = RankTrusted
@@ -92,6 +70,5 @@ VKUtilities.StrRanks = StrRanks
 VKUtilities.StrCategories = StrCategories
 VKUtilities.SendUserMessage = SendUserMessage
 VKUtilities.GetMessage = GetMessage
-VKUtilities.GetUser = GetUser
 
 return VKUtilities
