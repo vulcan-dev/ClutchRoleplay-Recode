@@ -2,15 +2,6 @@ local Server = {}
 
 local CommandPrefix
 
---[[
-                getSecret = function() return 'Console' end,
-            getName = function() return 'Console' end,
-            getID = function() return 0 end,
-            getIpAddr = function() return '127.0.0.1' end,
-            getCurrentVehicle = function() return nil end,
-            sendChatMessage = function() end
-]]
-
 --[[ Functions ]]--
 local function GenerateClient(clientID)
     local client
@@ -46,9 +37,11 @@ local function GenerateClient(clientID)
     end
 
     client.GetSecret = function() if clientID == GConsoleID then return 'Console' end return client.udata:getSecret() end
+    client.GetIP = function() if GBeamMPCompat then return MP.GetPlayerIdentifiers(clientID)['ip'] else return client.udata:getIpAddr(client.udata:getID()) end end
     client.GetName = function() if clientID == GConsoleID then return 'Console' end return client.udata:getName() end
     client.SendLua = function(lua, message) if GBeamMPCompat then MP.TriggerLocalEvent('SendLua', lua) else client.udata:sendLua(lua, message) end end
     client.GetID = function() return clientID end
+    client.GetIdentifier = function() if GBeamMPCompat then return MP.GetPlayerHWID() .. ':' .. MP.GetPlayerIdentifiers(client.GetID())['ip'] else return connections[clientID]:getSecret() .. ':' .. connections[clientID]:getIpAddr() end end
     client.Kick = function(reason) if GBeamMPCompat then MP.DropPlayer(client.GetID(), reason) else client.udata:kick(reason) end end
 
     client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[client.GetSecret()][key] end
@@ -78,14 +71,25 @@ local function ValidateClientData(clientID)
 
     local valid = true
 
+    local clientSecret
+    local clientIP
+
+    if GBeamMPCompat then
+        clientSecret = MP.GetPlayerHWID()
+        clientIP = MP.GetPlayerIdentifiers(clientID)['ip']
+    else
+        clientSecret = connections[clientID]:getSecret()
+        clientIP = connections[clientID]:getIpAddr()
+    end
+
     for key, _ in pairs(clientDataTemp) do
-        if not clientData[client:getSecret()][key] then
+        if not clientData[clientSecret .. ':' .. clientIP][key] then
             GWLog('Data [%s] missing from client: %s', key, client:getName())
             valid = false
         end
     end
 
-    clientData[client:getSecret()] = clientDataTemp
+    clientData[clientSecret .. ':' .. clientIP] = clientDataTemp
 
     if not valid then
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
@@ -100,15 +104,26 @@ local function RegisterClient(clientID)
     GClientCount = GClientCount + 1
     GClients[clientID] = {}
 
-    local clientSecret = connections[clientID]:getSecret()
+    local clientSecret
+    local clientIP
+
+    if GBeamMPCompat then
+        clientSecret = MP.GetPlayerHWID()
+        clientIP = MP.GetPlayerIdentifiers(clientID)['ip']
+    else
+        clientSecret = connections[clientID]:getSecret()
+        clientIP = connections[clientID]:getIpAddr()
+    end
+
+    GDLog(clientIP)
 
     --[[ Add New User to Database ]]--
     local clientData = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
-    if not clientData[clientSecret] then
-        clientData[clientSecret] = {}
+    if not clientData[clientSecret .. ':' .. clientIP] then
+        clientData[clientSecret .. ':' .. clientIP] = {}
 
         for extension, _ in pairs(GExtensions) do
-            if GExtensions[extension].CreateClientData then clientData[clientSecret] = GExtensions[extension].CreateClientData(GClients[clientID]) end
+            if GExtensions[extension].CreateClientData then clientData[clientSecret .. ':' .. clientIP] = GExtensions[extension].CreateClientData(GClients[clientID]) end
         end
 
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')

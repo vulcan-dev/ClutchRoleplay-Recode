@@ -10,13 +10,12 @@ local function OnPlayerConnected(clientID)
     local client = GClients[clientID]
     
     Server.DisplayDialog(client.GetName() .. ' has Connected!')
-
     --[[ Debugging ]]--
-    GDLog('Connect')
-    GDLog('ClientCount: %d', GClientCount)
-    for k, v in pairs(GClients) do
-        GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
-    end
+    -- GDLog('Connect')
+    -- GDLog('ClientCount: %d', GClientCount)
+    -- for k, v in pairs(GClients) do
+    --     GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
+    -- end
 end
 
 local function OnPlayerDisconnected(clientID)
@@ -27,11 +26,11 @@ local function OnPlayerDisconnected(clientID)
     Server.DestroyClient(clientID)
 
     --[[ Debugging ]]--
-    GDLog('Disconnect')
-    GDLog('ClientCount: %d', GClientCount)
-    for k, v in pairs(GClients) do
-        GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
-    end
+    -- GDLog('Disconnect')
+    -- GDLog('ClientCount: %d', GClientCount)
+    -- for k, v in pairs(GClients) do
+    --     GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
+    -- end
 end
 
 local function OnChat(clientID, message, console)

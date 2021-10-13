@@ -1,5 +1,5 @@
 {
-  "452ccee7b3599d37101de60c6bbad81e3359fb11": {
+  "452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1": {
     "Aliases": [],
     "Bans": [],
     "Detections": [],
@@ -10,19 +10,7 @@
     "VehicleLimit": 2.0,
     "Warnings": []
   },
-  "5a3e1ef352cf948e30c1d34d40046810781e8fc1": {
-    "Aliases": [],
-    "Bans": [],
-    "BlockList": [],
-    "Characters": [],
-    "Detections": [],
-    "Home": [],
-    "Kicks": [],
-    "Mutes": [],
-    "Playtime": 0.0,
-    "Rank": 6.0,
-    "VehicleLimit": 2.0,
-    "Warnings": []
-  },
-  "Console": { "Rank": 6 }
+  "Console": {
+    "Rank": 6.0
+  }
 }
