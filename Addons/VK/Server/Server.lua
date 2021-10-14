@@ -269,9 +269,6 @@ local function GetRankColour(colour) return Utilities.FileToJSON('Addons/VK/Sett
 local function GetRoleplayColour(colour) return Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Roleplay'][colour] end
 
 local function DestroyClient(clientID)
-    if GClientCount - 1 > 0 then
-        GClientCount = GClientCount - 1
-    end
     GClients[clientID] = nil
 end
 

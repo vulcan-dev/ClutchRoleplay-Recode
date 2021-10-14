@@ -68,6 +68,8 @@ VKUtilities.RankConsole = RankConsole
 VKUtilities.StrRanks = StrRanks
 
 VKUtilities.StrCategories = StrCategories
+VKUtilities.CategoryUtilities = CategoryUtilities
+VKUtilities.CategoryModeration = CategoryModeration
 VKUtilities.SendUserMessage = SendUserMessage
 VKUtilities.GetMessage = GetMessage
 
