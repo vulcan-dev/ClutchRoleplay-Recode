@@ -45,6 +45,7 @@ function AddPath(path)
 end
 
 function DateTime(format, time) return os.date(format or '%H:%M:%S', time) end
+function DebugTable(tbl) for k, v in pairs(tbl) do GDLog('Table: %s = %s', k, tostring(v)) end end
 
 function Include(include)
     if type(include) == 'string' then
