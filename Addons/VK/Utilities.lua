@@ -116,7 +116,7 @@ local function GetCommands(extensionName)
         local include = string.match(file, "Commands/(%S+).lua")
         last = string.match(file, "/(%S+).lua$"):gsub('/', '.')
         if last ~= nil then
-            commands[string.lower(include)] = Include(last)
+            commands[string.lower(string.sub(include, 3, #include))] = Include(last)
         end
     end
 
