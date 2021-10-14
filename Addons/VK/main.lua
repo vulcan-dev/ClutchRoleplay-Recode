@@ -2,7 +2,7 @@ require('Addons.VK.Globals')
 
 local _Extensions = {}
 
---[[ BeamMP Function Definitions ]] --
+--[[ BeamMP Helpers ]] --
 local function onPlayerConnected(clientID)
     Callbacks.OnPlayerDisconnected(clientID)
 end
@@ -12,12 +12,13 @@ end
 local function onChatMessage(clientID, _, message)
     Callbacks.OnChat(clientID, message)
 end
---[[ BeamMP Functions End ]]
+--[[ BeamMP Helpers End ]]
 
 local function Setup()
     Hooks = Include('Addons.VK.Server.Hooks')
     Utilities = Include('Addons.VK.Utilities')
     Callbacks = Include('Addons.VK.Callbacks')
+    Events = Include('Addons.VK.Server.Events')
 
     --[[ Setup Server Settings ]] --
     local ServerConfig = Utilities.FileToJSON('Addons/VK/Settings/Server.json')
@@ -32,6 +33,7 @@ local function Setup()
     else
         GLogFilePath = 'Development'
     end
+
     if GFileLogging then
         GLogFile = string.format('Development (%s).log', GStartupTime)
     end
@@ -41,26 +43,17 @@ local function Setup()
 
     --[[ Load Extensions ]] --
     GExtensions = Utilities.FileToJSON('./Addons/VK/Settings/Extensions.json')['Extensions']
-    for _, extension in ipairs(GExtensions) do
+    for _, extension in pairs(GExtensions) do
         _Extensions[extension] = Utilities.LoadExtension(extension)
         GILog('Loaded Extension: %s', extension)
     end
 
     --[[ Setup Callbacks ]] --
-    local validHooks = {
-        ['OnPlayerConnected'] = 'onPlayerConnected',
-        ['OnPlayerDisconnected'] = 'onPlayerDisconnect',
-        ['OnVehicleSpawned'] = 'OnVehicleSpawned',
-        ['OnVehicleResetted'] = 'onVehicleReset',
-        ['OnVehicleRemoved'] = 'onVehicleDeleted',
-        ['OnStdIn'] = 0,
-        ['OnChat'] = 'onChatMessage',
-        ['Tick'] = ''
-    }
-
     for name, _ in pairs(_Extensions) do
         for callbackName, callback in pairs(_Extensions[name].Callbacks) do
-            Hooks.Register(callbackName, name, callback)
+            if callbackName ~= 'OnPlayerConnected' and callbackName ~= 'OnPlayerDisconnected' then
+                Hooks.Register(callbackName, name, callback)
+            end
         end
     end
 
@@ -68,9 +61,10 @@ local function Setup()
 
     --[[ Shared Callbacks ]] --
     if not GBeamMPCompat then
-        Hooks.Register('OnChat', 'OnChatCallback', Callbacks.OnChat)
-        Hooks.Register('OnPlayerConnected', 'OnPlayerConnectedCallback', Callbacks.OnPlayerConnected)
-        Hooks.Register('OnPlayerDisconnected', 'OnPlayerDisconnectedCallback', Callbacks.OnPlayerDisconnected)
+        Hooks.Register('OnChat', 'OnChat', Callbacks.OnChat)
+        Hooks.Register('OnPlayerConnected', 'OnPlayerConnected', Callbacks.OnPlayerConnected)
+        Hooks.Register('OnPlayerDisconnected', 'OnPlayerDisconnected', Callbacks.OnPlayerDisconnected)
+        Hooks.Register('Tick', 'Tick', Callbacks.Tick)
     else
         Hooks.Register('onChatMessage', 'onChatMessage')
         Hooks.Register('onPlayerConnected', 'onPlayerConnected')

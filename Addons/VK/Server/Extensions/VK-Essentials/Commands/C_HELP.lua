@@ -21,7 +21,7 @@ Command.Execute = function(executor, arguments)
 
     --[[ /help ]]--
     if search == 'nil' and extension == 'nil' and category == 'nil' then
-        local output = 'Extensions:\n'
+        local output = 'Usage: help | help (command) | help <extension> <category>\nExtensions:\n'
         table.sort(extensions, function(a, b) return a > b end)
         for index, category in pairs(extensions) do
             output = output .. string.format('  %d: %s\n', index, category)
@@ -61,10 +61,7 @@ Command.Execute = function(executor, arguments)
         category = tostring(arguments[2])
 
         --[[ Look for Extension ]]--
-        if not extensions[tonumber(extension)] then
-            Server.DisplayDialogError(executor, 'Invalid Extension Provided (Do /help)')
-            return
-        end
+        if not extensions[tonumber(extension)] then return 'Invalid Extension Provided (Do /help)' end
     end
 
     local categories = {}
@@ -101,7 +98,7 @@ Command.Execute = function(executor, arguments)
     end end
     
     if command and command.Description and command.Usage and executor.GetRank() >= command.Rank then
-        local output = 'Category: ' .. command.Category
+        local output = 'Category: ' .. VKUtilities.StrCategories[command.Category]
         output = output .. '\nDescription: ' .. command.Description
         output = output .. '\nUsage: ' .. command.Usage
 

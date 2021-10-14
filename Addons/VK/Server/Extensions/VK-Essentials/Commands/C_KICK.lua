@@ -13,7 +13,7 @@ Command.Execute = function(executor, arguments)
     if not client then return GErrorInvalidUser end
     if not reason then reason = 'No reason specified' end
 
-    if executor.GetRank() <= client.GetRank() then return 'You cannot kick someone who is above you' end
+    if executor.GetRank() <= client.GetRank() then return GErrorCannotPerformUser end
 
     if client.mid == GConsoleID then GWLog('%s tried to kick you.', executor.GetName()) return 'You cannot kick console' end
 

@@ -56,6 +56,38 @@ local function GetMessage(arguments, start)
     return message
 end
 
+local function ParseTime(time)
+    local time_fmt = time:sub(-1)
+    time = time:sub(1, -2)
+
+    local year, month, day, hour, min, sec = os.date('%Y-%m-%d %H:%M:%S'):match('(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)')
+    local date = {
+        year = year,
+        month = month,
+        day = day,
+        hour = hour,
+        min = min,
+        sec = sec
+    }
+
+    if time_fmt == 'y' then
+        date.year = date.year + time
+    elseif time_fmt == 'mo' then
+        date.month = date.month + time
+    elseif time_fmt == 'd' then
+        date.day = date.day + time
+    elseif time_fmt == 'h' then
+        date.hour = date.hour + time
+    elseif time_fmt == 'm' then
+        date.min = date.min + time
+    else
+        return nil
+    end
+
+    local exp_sec = os.time{ year = date.year, month = date.month, day = date.day, hour = date.hour, min = date.min, sec = date.sec }
+    return exp_sec
+end
+
 --[[ Ranks ]]--
 VKUtilities.RankUser = RankUser
 VKUtilities.RankTrusted = RankTrusted
@@ -72,5 +104,6 @@ VKUtilities.CategoryUtilities = CategoryUtilities
 VKUtilities.CategoryModeration = CategoryModeration
 VKUtilities.SendUserMessage = SendUserMessage
 VKUtilities.GetMessage = GetMessage
+VKUtilities.ParseTime = ParseTime
 
 return VKUtilities

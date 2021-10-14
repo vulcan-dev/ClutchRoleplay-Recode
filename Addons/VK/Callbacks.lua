@@ -9,13 +9,14 @@ local function OnPlayerConnected(clientID)
     Server.RegisterClient(clientID)
     local client = GClients[clientID]
     
-    Server.DisplayDialog(client.GetName() .. ' has Connected!')
-    --[[ Debugging ]]--
-    -- GDLog('Connect')
-    -- GDLog('ClientCount: %d', GClientCount)
-    -- for k, v in pairs(GClients) do
-    --     GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
-    -- end
+    Server.WhenConnected(client, function()
+        Server.DisplayDialog(client.GetName() .. ' has Connected!')
+
+        for _, extension in pairs(GExtensions) do
+            GExtensions[_].Callbacks['OnPlayerConnected'](clientID)
+            -- extension.Callbacks['OnPlayerConnected'](clientID)
+        end
+    end)
 end
 
 local function OnPlayerDisconnected(clientID)
@@ -24,13 +25,6 @@ local function OnPlayerDisconnected(clientID)
 
     Server.DisplayDialog(client.GetName() .. ' has Left.')
     Server.DestroyClient(clientID)
-
-    --[[ Debugging ]]--
-    -- GDLog('Disconnect')
-    -- GDLog('ClientCount: %d', GClientCount)
-    -- for k, v in pairs(GClients) do
-    --     GDLog('Name: %s | MID: %d', v.GetName(), v.mid)
-    -- end
 end
 
 local function OnChat(clientID, message, console)
@@ -96,9 +90,16 @@ local function OnStdIn(message)
     Callbacks.OnChat(GConsoleID, message, true)
 end
 
+local function Tick()
+    Events.Update()
+
+    -- TODO: Collect Garbage
+end
+
 Callbacks.OnChat = OnChat
 Callbacks.OnPlayerConnected = OnPlayerConnected
 Callbacks.OnPlayerDisconnected = OnPlayerDisconnected
 Callbacks.OnStdIn = OnStdIn
+Callbacks.Tick = Tick
 
 return Callbacks

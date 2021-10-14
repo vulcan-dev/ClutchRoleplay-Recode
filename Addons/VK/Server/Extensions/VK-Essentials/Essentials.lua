@@ -26,20 +26,53 @@ local function GenerateClient(client)
     client.SetRank = function(rank) return client.EditKey('Rank', rank) end
     client.SetPlaytime = function(playtime) client.EditKey('Playtime', playtime) end
     client.SetVehicleLimit = function(limit) client.EditKey('VehicleLimit', limit) end
-    client.SetMuted = function(executor, muted) client.EditKey('Mutes', function()
-        return 'something'
+    client.AddMute = function(executor, reason, length) client.EditKey('Mutes', function()
+        local mutes = client.GetKey('Mutes')
+        local muteCount = TableLength(mutes)
+
+        mutes[tostring(muteCount+1)] = {
+            MutedBy = executor.GetName(),
+            Reason = reason,
+            Length = length,
+            ExpireryDate = os.date('%Y-%m-%d %H:%M:%S', length),
+            MuteDate = os.date('%Y-%m-%d %H:%M:%S')
+        }
+
+        return mutes
     end) end
 
     client.AddBan = function(executor, reason, length) client.EditKey('Bans', function()
-        return 'something'
+        local bans = client.GetKey('Bans')
+        local banCount = TableLength(bans)
+
+        bans[tostring(banCount+1)] = {
+            BannedBy = executor.GetName(),
+            Reason = reason,
+            Length = length,
+            ExpireryDate = os.date('%Y-%m-%d %H:%M:%S', length),
+            BanDate = os.date('%Y-%m-%d %H:%M:%S')
+        }
+
+        return bans
     end) end
 
     client.AddAlias = function(name) client.EditKey('Aliases', function()
-        return 'something'
+        local aliases = client.GetKey('Aliases')
+
+        table.insert(aliases, name)
+        return aliases
     end) end
 
     client.AddWarn = function(executor, reason) client.EditKey('Warnings', function()
-        return 'something'
+        local warns = client.GetKey('Warnings')
+        local warnCount = TableLength(warns)
+
+        warns[tostring(warnCount+1)] = {
+            WarnedBy = executor.GetName(),
+            Reason = reason,
+        }
+
+        return warns
     end) end
 
     return client

@@ -15,10 +15,15 @@ local validHooks = {
 
 Hooks.CustomHooks = {}
 
+local Hooked = {}
+
 local function Register(hook, subname, callback)
     if validHooks[hook] then
-        hooks.register(hook, subname, callback)
-        if string.find(subname, 'VK-') then
+        if Hooked[string.format('%s:%s', hook, subname)] then
+            GDLog('Already hooked') --fix
+        else
+            table.insert(Hooked, string.format('%s:%s', hook, subname))
+            hooks.register(hook, subname, callback)
             GILog('Registered Callback { ' .. hook .. ' } : Extension { ' .. subname .. ' }')
         end
     else

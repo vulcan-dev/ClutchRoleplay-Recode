@@ -1,11 +1,13 @@
 local Callbacks = {}
 
-local function OnPlayerConnected(clientID)
+require('Addons.VK.Globals')
 
+local function OnPlayerConnected(clientID)
+    
 end
 
 local function OnPlayerDisconnected(clientID)
-
+    
 end
 
 local function OnChat(clientID, message)

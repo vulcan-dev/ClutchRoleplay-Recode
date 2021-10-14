@@ -2,7 +2,7 @@ local Server = {}
 
 local CommandPrefix
 
---[[ Functions ]]--
+--[[ Client Functions ]]--
 local function GenerateClient(clientID)
     local client
 
@@ -41,6 +41,7 @@ local function GenerateClient(clientID)
     client.GetName = function() if clientID == GConsoleID then return 'Console' end return client.udata:getName() end
     client.SendLua = function(lua, message) if GBeamMPCompat then MP.TriggerLocalEvent('SendLua', lua) else client.udata:sendLua(lua, message) end end
     client.GetID = function() return clientID end
+    client.GetVehicle = function() return client.udata:getCurrentVehicle() or nil end
     client.GetIdentifier = function()
         if GBeamMPCompat then
             return MP.GetPlayerHWID() .. ':' .. MP.GetPlayerIdentifiers(client.GetID())['ip']
@@ -150,6 +151,15 @@ local function RegisterClient(clientID)
     end
 end
 
+local function WhenConnected(client, callback)
+    client.vehicles[client.GetVehicle()] = { vehicle = vehicles[client.GetVehicle()] }
+
+    Events.Add(function()
+        if client.vehicles[client.GetVehicle()] then callback() Events.Remove('CON_' .. client.GetID()) end
+        client.vehicles[client.GetVehicle()] = { vehicle = vehicles[client.GetVehicle()] }
+    end, 'CON_' .. client.GetID(), 2)
+end
+
 --[[ Server Functions ]]--
 local function SendChatMessage(client, message, colour)
     --[[ Optional: If client is not valid then it will send a message to everyone ]]--
@@ -194,11 +204,11 @@ local function DisplayDialog(error, client, message, time)
 
     if client.udata then
         --[[ Send to One Client ]]--
-        client.udata:sendLua(string.format("ui_message('%s', %s)", message, time))
+        client.SendLua(string.format("ui_message('%s', %s)", message, time), message)
     else
         --[[ Send to All Clients ]]--
         for _, c in pairs(GClients) do
-            c.udata:sendLua(string.format("ui_message('%s', %s)", message, time))
+            c.SendLua(string.format("ui_message('%s', %s)", message, time), message)
         end
     end
 end
@@ -274,6 +284,7 @@ end
 
 Server.Initialize = Initialize
 Server.ValidateClientData = ValidateClientData
+Server.WhenConnected = WhenConnected
 Server.RegisterClient = RegisterClient
 Server.DestroyClient = DestroyClient
 
