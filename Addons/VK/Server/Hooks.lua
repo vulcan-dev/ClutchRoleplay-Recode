@@ -18,7 +18,9 @@ Hooks.CustomHooks = {}
 local function Register(hook, subname, callback)
     if validHooks[hook] then
         hooks.register(hook, subname, callback)
-        GILog('Registered Callback { ' .. hook .. ' } : Extension { ' .. subname .. ' }')
+        if string.find(subname, 'VK-') then
+            GILog('Registered Callback { ' .. hook .. ' } : Extension { ' .. subname .. ' }')
+        end
     else
         Hooks.CustomHooks[hook] = callback
         GILog('Registered Custom Callback { ' .. hook .. ' } : Extension { ' .. subname .. ' }')
