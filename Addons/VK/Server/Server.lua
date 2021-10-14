@@ -17,7 +17,7 @@ local function GenerateClient(clientID)
             if message == nil and string.find(lua, 'guihooks.trigger') then
                 local type = lua:match("type='(.-)'")
                 local message = lua:match("title='(.-)'")
-                GDLog('Lua: [%s]: %s', type, message)
+                GILog('Lua: [%s]: %s', type, message)
             end
         end
         function client.udata:getName() return 'Console' end
@@ -41,11 +41,22 @@ local function GenerateClient(clientID)
     client.GetName = function() if clientID == GConsoleID then return 'Console' end return client.udata:getName() end
     client.SendLua = function(lua, message) if GBeamMPCompat then MP.TriggerLocalEvent('SendLua', lua) else client.udata:sendLua(lua, message) end end
     client.GetID = function() return clientID end
-    client.GetIdentifier = function() if GBeamMPCompat then return MP.GetPlayerHWID() .. ':' .. MP.GetPlayerIdentifiers(client.GetID())['ip'] else return connections[clientID]:getSecret() .. ':' .. connections[clientID]:getIpAddr() end end
+    client.GetIdentifier = function()
+        if GBeamMPCompat then
+            return MP.GetPlayerHWID() .. ':' .. MP.GetPlayerIdentifiers(client.GetID())['ip']
+        else
+            if clientID == 0 then
+                return 'Console'
+            end
+
+            return connections[clientID]:getSecret() .. ':' .. connections[clientID]:getIpAddr()
+        end
+    end
+
     client.Kick = function(reason) if GBeamMPCompat then MP.DropPlayer(client.GetID(), reason) else client.udata:kick(reason) end end
 
-    client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[client.GetSecret()][key] end
-    client.EditKey = function(key, value) local jsonData = Utilities.FileToJSON('Addons/VK/Server/Clients.json'); jsonData[client.GetSecret()][key] = value; Utilities.JSONToFile('Addons/VK/Server/Clients.json', jsonData) end
+    client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[client.GetIdentifier()][key] end
+    client.EditKey = function(key, value) local jsonData = Utilities.FileToJSON('Addons/VK/Server/Clients.json'); jsonData[client.GetIdentifier()][key] = value; Utilities.JSONToFile('Addons/VK/Server/Clients.json', jsonData) end
     
     client.mid = GClientCount
 
@@ -114,8 +125,6 @@ local function RegisterClient(clientID)
         clientSecret = connections[clientID]:getSecret()
         clientIP = connections[clientID]:getIpAddr()
     end
-
-    GDLog(clientIP)
 
     --[[ Add New User to Database ]]--
     local clientData = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
