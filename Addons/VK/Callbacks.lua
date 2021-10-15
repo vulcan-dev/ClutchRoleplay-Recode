@@ -13,7 +13,7 @@ local function OnPlayerConnected(clientID)
         Server.DisplayDialog(client.GetName() .. ' has Connected!')
 
         for _, extension in pairs(GExtensions) do
-            GExtensions[_].Callbacks['OnPlayerConnected'](clientID)
+            GExtensions[_].Callbacks['OnPlayerConnected'](client)
             -- extension.Callbacks['OnPlayerConnected'](clientID)
         end
     end)

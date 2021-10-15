@@ -106,5 +106,5 @@ GLogFilePath = nil
 GLogFile = nil
 GStartupTime = nil
 
-GConsoleID = 0
+GConsoleID = -1
 GServerInitialized = false

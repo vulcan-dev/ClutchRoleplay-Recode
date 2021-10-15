@@ -13,10 +13,10 @@ Command.Execute = function(executor, arguments)
     if GClientCount == 0 then return 'No one is on the server' end
 
     if client then
-        Server.SendChatMessage(executor, string.format('%s\'s ID: %s', client.GetName(), tonumber(client.mid)))
+        Server.SendChatMessage(executor, string.format('%s\'s ID: %s', client.GetName(), tonumber(client.mid)), Server.GetStatusColour('Information'))
     else
         for _, client in pairs(GClients) do
-            Server.SendChatMessage(executor, string.format('%s\'s ID: %s', client.GetName(), tonumber(client.mid)))
+            Server.SendChatMessage(executor, string.format('%s\'s ID: %s', client.GetName(), tonumber(client.mid)), Server.GetStatusColour('Information'))
         end
     end
 end

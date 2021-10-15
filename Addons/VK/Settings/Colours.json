@@ -13,7 +13,8 @@
     "Status": {
         "Success": { "r": 84, "g": 245, "b": 140 },
         "Warning": { "r": 240, "g": 187, "b": 66 },
-        "Error": { "r": 240, "g": 79, "b": 74 }
+        "Error": { "r": 240, "g": 79, "b": 74 },
+        "Information": { "r": 52, "g": 152, "b": 219 }
     },
 
     "Roleplay": {

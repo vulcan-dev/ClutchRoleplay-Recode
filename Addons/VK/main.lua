@@ -15,6 +15,7 @@ end
 --[[ BeamMP Helpers End ]]
 
 local function Setup()
+    JSON = Include('Addons.VK.JSON')
     Hooks = Include('Addons.VK.Server.Hooks')
     Utilities = Include('Addons.VK.Utilities')
     Callbacks = Include('Addons.VK.Callbacks')

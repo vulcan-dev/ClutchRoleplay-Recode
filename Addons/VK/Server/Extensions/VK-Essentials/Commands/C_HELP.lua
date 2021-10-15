@@ -27,7 +27,7 @@ Command.Execute = function(executor, arguments)
             output = output .. string.format('  %d: %s\n', index, category)
         end
 
-        Server.SendChatMessage(executor, output)
+        Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
     end
 
@@ -84,7 +84,7 @@ Command.Execute = function(executor, arguments)
             end
         end
 
-        Server.SendChatMessage(executor, output)
+        Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
     else if (not command and extension ~= 'nil') and category == 'nil' then
         --[[ Display Categories ]]--
@@ -93,7 +93,7 @@ Command.Execute = function(executor, arguments)
             output = output .. string.format('  %d: %s\n', index, category)
         end
 
-        Server.SendChatMessage(executor, output)
+        Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
     end end
     
@@ -116,16 +116,9 @@ Command.Execute = function(executor, arguments)
             end
         end
 
-        Server.SendChatMessage(executor, output)
+        Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
     end
-
-    --[[
-        1: Essentials
-        2: AntiCheat
-        3: Roleplay
-        4: CNR
-    ]]
 end
 
 return Command

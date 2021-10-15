@@ -6,7 +6,7 @@ local CommandPrefix
 local function GenerateClient(clientID)
     local client
 
-    if clientID == 0 then
+    if clientID == GConsoleID then
         GClients[GConsoleID] = {}
         GClients[GConsoleID].udata = {}
 
@@ -46,7 +46,7 @@ local function GenerateClient(clientID)
         if GBeamMPCompat then
             return MP.GetPlayerHWID() .. ':' .. MP.GetPlayerIdentifiers(client.GetID())['ip']
         else
-            if clientID == 0 then
+            if clientID == GConsoleID then
                 return 'Console'
             end
 
@@ -105,7 +105,7 @@ local function ValidateClientData(clientID)
 
     if not valid then
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
-        file:write(encode_json_pretty(clientData))
+        file:write(JSON.encode(clientData))
         file:close()
 
         GILog('Fixed Database For: [%s] - %s', client:getName(), client:getSecret())
@@ -137,7 +137,7 @@ local function RegisterClient(clientID)
         end
 
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
-        file:write(encode_json_pretty(clientData))
+        file:write(JSON.encode(clientData))
         file:close()
     end
 
@@ -214,34 +214,34 @@ local function DisplayDialog(error, client, message, time)
 end
 
 local function DisplayDialogError(client, message)
-    if client and GErrors[message] then
-        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='error', title='%s', config = {timeOut = 3000}})", GErrors[message]))
+    if client then
+        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='error', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
     else
         if type(client) ~= 'table' then message = client end
         for _, client in pairs(GClients) do
-            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='error', title='%s', config = {timeOut = 3000}})", tostring(message)))
+            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='error', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
         end
     end
 end
 
 local function DisplayDialogWarning(client, message)
-    if client and GErrors[message] then
-        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='warning', title='%s', config = {timeOut = 3000}})", GErrors[message]))
+    if client then
+        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='warning', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
     else
         if type(client) ~= 'table' then message = client end
         for _, client in pairs(GClients) do
-            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='warning', title='%s', config = {timeOut = 3000}})", tostring(message)))
+            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='warning', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
         end
     end
 end
 
 local function DisplayDialogSuccess(client, message)
-    if client and GErrors[message] then
-        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='success', title='%s', config = {timeOut = 3000}})", GErrors[message]))
+    if client then
+        client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='success', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
     else
         if type(client) ~= 'table' then message = client end
         for _, client in pairs(GClients) do
-            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='success', title='%s', config = {timeOut = 3000}})", tostring(message)))
+            client.SendLua(string.format("guihooks.trigger('toastrMsg', {type='success', title='%s', config = {timeOut = 3000}})", GErrors[message] or message))
         end
     end
 end
@@ -274,9 +274,9 @@ local function SetCommandPrefix(prefix) CommandPrefix = prefix end
 --[[ Accessors ]]--
 local function GetCommandPrefix() return CommandPrefix end
 local function GetPlayerCount() return GClientCount end
-local function GetStatusColour(colour) return Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Status'][colour] end
-local function GetRankColour(colour) return Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Rank'][colour] end
-local function GetRoleplayColour(colour) return Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Roleplay'][colour] end
+local function GetStatusColour(colour) return Utilities.ConvertColour(Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Status'][colour]) end
+local function GetRankColour(colour) return Utilities.ConvertColour(Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Rank'][colour]) end
+local function GetRoleplayColour(colour) return Utilities.ConvertColour(Utilities.FileToJSON('Addons/VK/Settings/Colours.json')['Roleplay'][colour]) end
 
 local function DestroyClient(clientID)
     GClients[clientID] = nil

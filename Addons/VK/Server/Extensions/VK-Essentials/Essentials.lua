@@ -15,65 +15,65 @@ end
 local function GenerateClient(client)
     --[[ Accessors ]]--
     client.GetRank = function() return client.GetKey('Rank') end
-    client.GetPlaytime = function() end
-    client.GetVehicleLimit = function() end
-    client.GetBans = function() end
-    client.GetMuted = function() end
-    client.GetAliases = function() end
-    client.GetWarnings = function() end
+    client.GetPlaytime = function() return client.GetKey('Playtime') end
+    client.GetVehicleLimit = function() return client.GetKey('VehicleLimit') end
+    client.GetBanned = function() for k, v in pairs(client.GetKey('Bans')) do if v.Length > 0 then return v end end return nil end
+    client.GetMuted = function() for k, v in pairs(client.GetKey('Mutes')) do if v.Length > 0 then return v end end return nil end
+    client.GetAliases = function() return client.GetKey('Aliases') end
+    client.GetWarnings = function() return client.GetKey('Warnings') end
 
     --[[ Modifiers ]]--
     client.SetRank = function(rank) return client.EditKey('Rank', rank) end
     client.SetPlaytime = function(playtime) client.EditKey('Playtime', playtime) end
     client.SetVehicleLimit = function(limit) client.EditKey('VehicleLimit', limit) end
-    client.AddMute = function(executor, reason, length) client.EditKey('Mutes', function()
+    client.AddMute = function(executor, reason, length) 
         local mutes = client.GetKey('Mutes')
         local muteCount = TableLength(mutes)
+        muteCount = muteCount + 1
 
-        mutes[tostring(muteCount+1)] = {
+        mutes[tostring(muteCount)] = {
             MutedBy = executor.GetName(),
             Reason = reason,
             Length = length,
             ExpireryDate = os.date('%Y-%m-%d %H:%M:%S', length),
-            MuteDate = os.date('%Y-%m-%d %H:%M:%S')
+            MuteDate = os.date('%Y-%m-%d %H:%M:%S'),
+            ID = tonumber(muteCount)
         }
 
-        return mutes
-    end) end
+        client.EditKey('Mutes', mutes)
+    end
 
-    client.AddBan = function(executor, reason, length) client.EditKey('Bans', function()
+    client.AddBan = function(executor, reason, length)
         local bans = client.GetKey('Bans')
         local banCount = TableLength(bans)
+        banCount = banCount + 1
 
-        bans[tostring(banCount+1)] = {
+        bans[tostring(banCount)] = {
             BannedBy = executor.GetName(),
             Reason = reason,
             Length = length,
             ExpireryDate = os.date('%Y-%m-%d %H:%M:%S', length),
-            BanDate = os.date('%Y-%m-%d %H:%M:%S')
+            BanDate = os.date('%Y-%m-%d %H:%M:%S'),
+            ID = tonumber(banCount)
         }
 
-        return bans
-    end) end
+        client.EditKey('Bans', bans)
+    end
 
-    client.AddAlias = function(name) client.EditKey('Aliases', function()
-        local aliases = client.GetKey('Aliases')
+    client.AddAlias = function(name) local aliases = client.GetKey('Aliases') table.insert(aliases, name) client.EditKey('Aliases', aliases) end
 
-        table.insert(aliases, name)
-        return aliases
-    end) end
-
-    client.AddWarn = function(executor, reason) client.EditKey('Warnings', function()
+    client.AddWarn = function(executor, reason)
         local warns = client.GetKey('Warnings')
         local warnCount = TableLength(warns)
+        warnCount = warnCount + 1
 
-        warns[tostring(warnCount+1)] = {
+        warns[tostring(warnCount)] = {
             WarnedBy = executor.GetName(),
             Reason = reason,
+            ID = warnCount
         }
-
-        return warns
-    end) end
+        client.EditKey('Warnings', warns)
+    end
 
     return client
 end

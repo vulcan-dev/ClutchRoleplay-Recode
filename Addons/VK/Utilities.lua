@@ -12,14 +12,14 @@ end
 
 local function FileToJSON(path)
     local file = io.open(path, 'r')
-    local data = decode_json(file:read('*a'))
+    local data = JSON.decode(file:read('*a'))
     file:close()
     return data
 end
 
 local function JSONToFile(path, jsonData)
     local file = io.open(path, 'w+')
-    file:write(encode_json_pretty(jsonData))
+    file:write(JSON.encode(jsonData))
     file:close()
 end
 
