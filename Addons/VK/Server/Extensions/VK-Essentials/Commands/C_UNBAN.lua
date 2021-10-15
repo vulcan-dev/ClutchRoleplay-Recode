@@ -22,7 +22,7 @@ Command.Execute = function(executor, arguments)
     bans[tostring(ban.ID)].Length = 0
     client.EditKey('Bans', bans)
 
-    Server.DisplayDialogSuccess(executor, string.format('Successfully Banned %s', client.GetName()))
+    Server.DisplayDialogSuccess(executor, string.format('Successfully Unbanned %s', client.GetName()))
 end
 
 return Command

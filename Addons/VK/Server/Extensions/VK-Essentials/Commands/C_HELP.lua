@@ -77,7 +77,7 @@ Command.Execute = function(executor, arguments)
     if (not command and extension ~= 'nil') and categories[tonumber(category)] then
         local output = 'Commands for Category: ' .. VKUtilities.StrCategories[tonumber(category)] .. '\n'
         for commandName, command in pairs(GCommands) do
-            if command.Category == tonumber(category) then
+            if command.Category == tonumber(category) and executor.GetRank() >= command.Rank then
                 output = output .. '\nCommand: ' .. commandName
                 output = output .. '\nDescription: ' .. command.Description
                 if command.Usage then output = output .. '\nUsage: ' .. command.Usage .. '\n' end

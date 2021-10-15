@@ -52,7 +52,7 @@ local function Setup()
     --[[ Setup Callbacks ]] --
     for name, _ in pairs(_Extensions) do
         for callbackName, callback in pairs(_Extensions[name].Callbacks) do
-            if callbackName ~= 'OnPlayerConnected' and callbackName ~= 'OnPlayerDisconnected' then
+            if callbackName ~= 'OnPlayerConnected' then
                 Hooks.Register(callbackName, name, callback)
             end
         end

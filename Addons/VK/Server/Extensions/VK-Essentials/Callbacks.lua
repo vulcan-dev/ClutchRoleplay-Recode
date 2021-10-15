@@ -38,11 +38,13 @@ local function OnPlayerConnected(client)
     end
 end
 
-local function OnPlayerDisconnected(client)
+local function OnPlayerDisconnected(clientID)
     
 end
 
-local function OnChat(client, message)
+local function OnChat(clientID, message)
+    local client = GClients[clientID]
+
     --[[ Check if Command ]]--
     if string.sub(message, 1, 1) == Server.GetCommandPrefix() then
         local arguments = Utilities.ParseCommand(message, ' ')

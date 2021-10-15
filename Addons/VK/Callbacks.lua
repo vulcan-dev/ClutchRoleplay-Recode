@@ -29,13 +29,13 @@ end
 local function OnChat(clientID, message)
     --[[ Shared OnChat ]]--
     local client = GClients[clientID]
-    if GExtensions['VK-Essentials'] then GExtensions['VK-Essentials'].Callbacks.OnChat(client, message) end
+    -- if GExtensions['VK-Essentials'] then GExtensions['VK-Essentials'].Callbacks.OnChat(client, message) end
 
-    return message
+    if not GExtensions['VK-Essentials'] then return message end
 end
 
 local function OnStdIn(message)
-    Callbacks.OnChat(GConsoleID, message)
+    if GExtensions['VK-Essentials'] then GExtensions['VK-Essentials'].Callbacks.OnChat(GConsoleID, message) end
 end
 
 local function Tick()

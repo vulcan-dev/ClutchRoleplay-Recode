@@ -3,7 +3,7 @@ local Server = {}
 local CommandPrefix
 
 --[[ Client Functions ]]--
-local function GenerateClient(clientID)
+local function GenerateClient(clientID, secret, ip)
     local client
 
     if clientID == GConsoleID then
@@ -36,6 +36,21 @@ local function GenerateClient(clientID)
         client.udata = connections[clientID]
     end
 
+    --[[ Offline ]]--
+    if secret then
+        client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[secret .. ':' .. ip][key] end
+
+        client.udata = {
+            getSecret = function() return secret end,
+            getIP = function() return ip end,
+            getCurrentVehicle = function() return nil end,
+            getName = function() return client.GetKey('Aliases')[TableLength(client.GetKey('Aliases'))] end,
+            kick = function() end
+        }
+
+        client.offline = true
+    end
+
     client.GetSecret = function() if clientID == GConsoleID then return 'Console' end return client.udata:getSecret() end
     client.GetIP = function() if GBeamMPCompat then return MP.GetPlayerIdentifiers(clientID)['ip'] else return client.udata:getIpAddr(client.udata:getID()) end end
     client.GetName = function() if clientID == GConsoleID then return 'Console' end return client.udata:getName() end
@@ -54,11 +69,28 @@ local function GenerateClient(clientID)
         end
     end
 
-    client.Kick = function(reason) if GBeamMPCompat then MP.DropPlayer(client.GetID(), reason) else client.udata:kick(reason) end end
+    --[[ Offline ]]--
+    if secret then
+        client.GetIdentifier = function() return secret .. ':' .. ip end
+    end
+
+    client.Kick = function(reason) if GBeamMPCompat then MP.DropPlayer(client.GetID(), reason) else if not client.offline then client.udata:kick(reason) return true else return false end end end
 
     client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[client.GetIdentifier()][key] end
     client.EditKey = function(key, value) local jsonData = Utilities.FileToJSON('Addons/VK/Server/Clients.json'); jsonData[client.GetIdentifier()][key] = value; Utilities.JSONToFile('Addons/VK/Server/Clients.json', jsonData) end
     
+    --[[ Offline ]]--
+    if secret then
+        client.GetKey = function(key) return Utilities.FileToJSON('Addons/VK/Server/Clients.json')[secret .. ':' .. ip][key] end
+        client.GetName = function() return client.GetKey('Aliases')[TableLength(client.GetKey('Aliases'))] end
+
+        for extension, _ in pairs(GExtensions) do
+            if GExtensions[extension].GenerateClient then
+                GExtensions[extension].GenerateClient(GClients[-5])
+            end
+        end
+    end
+
     client.mid = GClientCount
 
     client.vehicles = {}
@@ -249,20 +281,64 @@ end
 local function GetUser(identifier)
     if not identifier then return nil end
 
+    --[[ Check Online Clients ]]--
+    GClients[-5] = nil
     for _, client in pairs(GClients) do
         if identifier == client.GetName() then
             return client
-        else if tonumber(identifier) == client.GetID() then
+        elseif tonumber(identifier) == client.GetID() then
             return client
-        else if identifier == client.GetSecret() then
+        elseif identifier == client.GetSecret() then
             return client
-        else if tonumber(identifier) == client.mid then
+        elseif tonumber(identifier) == client.mid then
             return client
-        else if string.find(client.GetName(), identifier) then
+        elseif string.find(client.GetName(), identifier) then
             return client
-        else if string.find(string.lower(client.GetName()), identifier) then
+        elseif string.find(string.lower(client.GetName()), identifier) then
             return client
-        end end end end end end
+        end
+    end
+
+    --[[ Check Offline Clients ]]--
+    GClients[-5] = {}
+    GClients[-5].udata = {}
+
+    local client = GClients[-5]
+
+    function client.udata:sendLua(lua, message)
+        if message ~= nil then GILog('Lua: %s', message) end
+        if message == nil and string.find(lua, 'guihooks.trigger') then
+            local type = lua:match("type='(.-)'")
+            local message = lua:match("title='(.-)'")
+            GILog('Lua: [%s]: %s', type, message)
+        end
+    end
+    function client.udata:getName() return 'Console' end
+    function client.udata:getSecret() return 'Console' end
+    function client.udata:getID() return -5 end
+    function client.udata:getIpAddr() return '127.0.0.1' end
+    function client.udata:getCurrentVehicle() return nil end
+
+    local clients = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
+    
+    --[[ Check by IP or Secret ]]--
+    for id, v in pairs(clients) do
+        if id ~= 'Console' then
+            local secret, ip = id:match("(.+):(.+)")
+            if identifier == secret or identifier == ip then
+                return GenerateClient(-5, secret, ip)
+            end
+        end
+    end
+
+    --[[ Check by Name ]]--
+    for id, c in pairs(clients) do
+        if id ~= 'Console' then
+            if string.find(string.lower(c.Aliases[TableLength(c.Aliases)]), string.lower(identifier)) then
+                local secret, ip = id:match("(.+):(.+)")
+                return GenerateClient(-5, secret, ip)
+            end
+        end
     end
 
     return nil

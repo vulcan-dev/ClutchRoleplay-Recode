@@ -15,6 +15,10 @@ Command.Execute = function(executor, arguments)
     if executor.GetRank() <= client.GetRank() then return GErrorCannotPerformUser end
 
     client.AddWarn(executor, reason)
+    if TableLength(client.GetWarnings()) >= 3 then -- should be == 3
+        GCommands['ban'].Execute(GClients[GConsoleID], {client.GetSecret(), '1d', 'Exceeded warn amount', true})
+    end
+
     Server.DisplayDialogSuccess(executor, string.format('Successfully Warned %s for: %s', client.GetName(), reason))
 end
 

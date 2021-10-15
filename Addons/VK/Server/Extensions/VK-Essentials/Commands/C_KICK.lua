@@ -8,10 +8,14 @@ Command.Description = 'Kick a User'
 Command.Usage = 'kick <user> (reason)'
 Command.Execute = function(executor, arguments)
     local client = Server.GetUser(arguments[1])
-    local reason = 'Kicked by ' .. executor.GetName() .. ': ' .. VKUtilities.GetMessage(arguments, 2)
-
+    local reason = VKUtilities.GetMessage(arguments, 2)
+    
     if not client then return GErrorInvalidUser end
     if not reason then reason = 'No reason specified' end
+
+    if client.offline then return client.GetName() .. ' is offline' end
+    
+    local reason = 'Kicked by ' .. executor.GetName() .. ': ' .. VKUtilities.GetMessage(arguments, 2)
 
     if executor.GetRank() <= client.GetRank() then return GErrorCannotPerformUser end
 
