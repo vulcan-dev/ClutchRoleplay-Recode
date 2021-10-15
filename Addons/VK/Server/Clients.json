@@ -1,1 +1,34 @@
-{"Console":{"Rank":7},"452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1":{"Detections":[],"Rank":0,"Mutes":[],"Warnings":{"2":{"WarnedBy":"Console","Reason":"test ","ID":2},"1":{"WarnedBy":"Console","Reason":"test ","ID":1},"3":{"WarnedBy":"Console","Reason":"lol ","ID":3}},"Aliases":["Daniel W"],"Playtime":0,"VehicleLimit":2,"Kicks":[],"Bans":{"1":{"Length":0,"BanDate":"2021-10-15 03:20:58","Reason":"Exceeded warn amount ","ID":1,"BannedBy":"Console","ExpireryDate":"2021-10-16 03:20:58"}}}}
+{
+    "Console": {
+        "Rank": 7
+    },
+    "452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1": {
+        "Detections": [],
+        "Rank": 0,
+        "Mutes": [],
+        "Warnings": {
+            "2": {
+                "WarnedBy": "Console",
+                "Reason": "test ",
+                "ID": 2
+            },
+            "1": {
+                "WarnedBy": "Console",
+                "Reason": "test ",
+                "ID": 1
+            },
+            "3": {
+                "WarnedBy": "Console",
+                "Reason": "lol ",
+                "ID": 3
+            }
+        },
+        "Aliases": [
+            "Daniel W"
+        ],
+        "Playtime": 0,
+        "VehicleLimit": 2,
+        "Kicks": [],
+        "Bans": []
+    }
+}
