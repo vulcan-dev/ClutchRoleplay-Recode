@@ -80,6 +80,8 @@ local function ParseTime(time)
         date.hour = date.hour + time
     elseif time_fmt == 'm' then
         date.min = date.min + time
+    elseif time_fmt == 's' then
+        date.sec = date.sec + time
     else
         return nil
     end

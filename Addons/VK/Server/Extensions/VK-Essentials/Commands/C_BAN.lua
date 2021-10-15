@@ -21,6 +21,9 @@ Command.Execute = function(executor, arguments)
     time = VKUtilities.ParseTime(time)
     if not time then return 'Invalid Time Specified' end
 
+    local ban = client.GetBanned()
+    if ban then return client.GetName() .. ' is already banned' end
+
     client.AddBan(executor, reason, time)
 
     client.Kick(string.format('Banned by: %s until %s. Reason: %s', executor.GetName(), os.date('%Y-%m-%d %H:%M:%S', time), reason))
