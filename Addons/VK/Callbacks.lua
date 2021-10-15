@@ -14,7 +14,6 @@ local function OnPlayerConnected(clientID)
 
         for _, extension in pairs(GExtensions) do
             GExtensions[_].Callbacks['OnPlayerConnected'](client)
-            -- extension.Callbacks['OnPlayerConnected'](clientID)
         end
     end)
 end
@@ -77,7 +76,20 @@ local function OnChat(clientID, message, console)
                 end
             end
         else
-            GExtensions['VK-Essentials'].Utilities.SendUserMessage(client, message)
+            local mute = client.GetMuted()
+            if mute then
+                if mute.Length > 0 then
+                    if mute.Length <= os.time() then
+                        local mutes = client.GetKey('Mutes')
+                        mutes[tostring(mute.ID)].Length = 0
+                        client.EditKey('Mutes', mutes)
+                    else
+                        return ''
+                    end
+                end
+            else
+                GExtensions['VK-Essentials'].Utilities.SendUserMessage(client, message)
+            end
         end
 
         return ''
