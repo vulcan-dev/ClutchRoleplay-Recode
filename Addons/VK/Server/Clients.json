@@ -1,1 +1,1 @@
-{"452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1":{"Mutes":[],"Rank":6,"Detections":[],"Warnings":{"1":{"ID":1,"WarnedBy":"Console","Reason":"test "},"2":{"ID":2,"WarnedBy":"Console","Reason":"test "},"3":{"ID":3,"WarnedBy":"Console","Reason":"lol "}},"Kicks":[],"Playtime":0,"Aliases":["Daniel W"],"Bans":[],"VehicleLimit":2},"Console":{"Rank":7}}
+{"452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1":{"VehicleLimit":2,"Bans":[],"Kicks":[],"Warnings":[],"Detections":[],"Rank":5,"Aliases":["Daniel W"],"Playtime":0,"Mutes":[]},"Console":{"Rank":7}}
