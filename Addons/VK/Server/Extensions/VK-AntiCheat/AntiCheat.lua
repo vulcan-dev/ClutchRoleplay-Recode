@@ -4,6 +4,15 @@ require('Addons.VK.Globals')
 
 local Callbacks = Include('Addons.VK.Server.Extensions.VK-AntiCheat.Callbacks')
 
+local function Initialize()
+    GDLog('VK-AntiCheat Initialized')
+    AntiCheat.Config = Utilities.FileToJSON('Addons/VK/Server/Extensions/VK-AntiCheat/Settings/Config.json')
+
+    --[[ Initialize all Commmands ]]--
+    local commands = Utilities.GetCommands('VK-AntiCheat')
+    Utilities.AddCommandTable(commands)
+end
+
 local function CreateClientData(client)
     GDLog('VK-AntiCheat : Creating Client Data')
 
@@ -12,6 +21,7 @@ local function CreateClientData(client)
     return client
 end
 
+AntiCheat.Initialize = Initialize
 AntiCheat.CreateClientData = CreateClientData
 AntiCheat.Callbacks = Callbacks
 
