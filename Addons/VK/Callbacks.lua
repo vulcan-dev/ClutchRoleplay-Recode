@@ -14,6 +14,7 @@ local function OnPlayerConnected(clientID)
 
         for _, extension in pairs(GExtensions) do
             GExtensions[_].Callbacks['OnPlayerConnected'](client)
+            client.connected = true
         end
     end)
 end

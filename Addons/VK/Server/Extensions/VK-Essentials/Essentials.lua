@@ -108,9 +108,18 @@ local function CreateClientData(client)
     return client
 end
 
+local function UpdateClientPlaytime()
+    -- for _, client in pairs(GClients) do
+    --     if client:GetID() ~= GConsoleID and client.connected then
+    --         client.SetPlaytime(client.GetPlaytime() + 1)
+    --     end
+    -- end
+end
+
 Essentials.Initialize = Initialize
 Essentials.GenerateClient = GenerateClient
 Essentials.CreateClientData = CreateClientData
 Essentials.Callbacks = Callbacks
+Essentials.UpdateClientPlaytime = UpdateClientPlaytime
 
 return Essentials

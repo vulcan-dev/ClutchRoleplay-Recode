@@ -1,1 +1,18 @@
-{"452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1":{"Detections":[],"Bans":[],"Warnings":{"1":{"Date":"2021-10-23 20:55:51","Reason":"test1 ","ID":1,"WarnedBy":"Console"}},"VehicleLimit":2,"Playtime":0,"Mutes":[],"Rank":5,"Aliases":["Daniel W"],"Kicks":[]},"Console":{"Rank":7}}
+{
+    "Console": {
+        "Rank": 7
+    },
+    "452ccee7b3599d37101de60c6bbad81e3359fb11:127.0.0.1": {
+        "Bans": [],
+        "Kicks": [],
+        "Aliases": [
+            "Daniel W"
+        ],
+        "Playtime": 0,
+        "Warnings": [],
+        "Rank": 0,
+        "VehicleLimit": 2,
+        "Detections": [],
+        "Mutes": []
+    }
+}

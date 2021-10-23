@@ -93,6 +93,7 @@ local function GenerateClient(clientID, secret, ip)
 
     client.mid = GClientCount
 
+    client.connected = false
     client.vehicles = {}
     client.vehicles.total = 0
 
@@ -108,6 +109,7 @@ end
 local function ValidateClientData(clientID)
     local client = connections[clientID]
     local database = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
+    local clientDataTemp
     for extension, _ in pairs(GExtensions) do
         if GExtensions[extension].CreateClientData then clientDataTemp = GExtensions[extension].CreateClientData(GClients[clientID]) end
     end
@@ -126,23 +128,22 @@ local function ValidateClientData(clientID)
         clientIP = connections[clientID]:getIpAddr()
     end
 
-    for key, _ in pairs(database) do
+    for key, value in pairs(clientDataTemp) do
         if not database[clientSecret .. ':' .. clientIP][key] then
-            GWLog('Data [%s] missing from client: %s', key, client:getName())
+            database[clientSecret .. ':' .. clientIP][key] = value
+            GWLog('Data [%s] missing from client: %s\nAdded "%s: %s"', key, client:getName(), key, value)
             valid = false
         end
-
-        exists = true
     end
 
-    database[clientSecret .. ':' .. clientIP] = {}
+    if not database[clientSecret .. ':' .. clientIP] then database[clientSecret .. ':' .. clientIP] = {} end
 
     if not valid then
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
         file:write(JSON.encode(database))
         file:close()
 
-        GILog('Fixed Database For: [%s] - %s', client:getName(), client:getSecret()) else GILog('Added "%s" to Database', client:getName())
+        GILog('Fixed Database For: [%s:%s]', client:getName(), client:getSecret()) else GILog('Added "%s" to Database', client:getName())
     end
 end
 

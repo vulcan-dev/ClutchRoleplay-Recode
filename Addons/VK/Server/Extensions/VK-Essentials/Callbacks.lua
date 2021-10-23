@@ -110,8 +110,13 @@ local function OnChat(clientID, message)
     return ''
 end
 
+local function OnTick()
+    GExtensions['VK-Essentials'].UpdateClientPlaytime()
+end
+
 Callbacks['OnPlayerConnected'] = OnPlayerConnected
 Callbacks['OnPlayerDisconnected'] = OnPlayerDisconnected
 Callbacks['OnChat'] = OnChat
+Callbacks['Tick'] = OnTick
 
 return Callbacks
