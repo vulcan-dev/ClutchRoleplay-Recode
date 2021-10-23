@@ -381,5 +381,3 @@ Server.GetRankColour = GetRankColour
 Server.GetRoleplayColour = GetRoleplayColour
 
 return Server
-
--- test
