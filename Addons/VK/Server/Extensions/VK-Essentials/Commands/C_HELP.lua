@@ -60,24 +60,21 @@ Command.Execute = function(executor, arguments)
         extension = tostring(arguments[1])
         category = tostring(arguments[2])
 
-        GDLog('Extension: %s', extensions[tonumber(extension)])
-
         --[[ Look for Extension ]]--
         if not extensions[tonumber(extension)] then return 'Invalid Extension Provided (Do /help)' end
     end
 
     local categories = {}
-    for _, command in pairs(GCommands) do
+    for _, command in pairs(GExtensions[extensions[tonumber(extension)]].Commands) do
         if VKUtilities.StrCategories[command.Category] then
             if not categories[command.Category] then
                 categories[command.Category] = VKUtilities.StrCategories[command.Category]
             end
         end
     end
-    table.sort(categories, function(a, b) return a > b end)
+    --table.sort(categories, function(a, b) return a > b end)
 
-    GDLog('Category: %s', categories[tonumber(category)])
-
+    --[[ help <extension> <category> ]]
     if (not command and extension ~= 'nil') and categories[tonumber(category)] then
         local output = 'Commands for Category: ' .. VKUtilities.StrCategories[tonumber(category)] .. '\n'
         for commandName, command in pairs(GExtensions[extensions[tonumber(extension)]].Commands) do
@@ -90,7 +87,7 @@ Command.Execute = function(executor, arguments)
 
         Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
-    elseif (not command and extension ~= 'nil') and category == 'nil' then
+    elseif (not command and extension ~= 'nil') and category == 'nil' then --[[ help <extension> ]]--
         --[[ Display Categories ]]--
         local output = 'Categories:\n'
         for index, category in pairs(categories) do
