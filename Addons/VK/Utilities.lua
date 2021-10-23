@@ -129,6 +129,25 @@ local function AddCommandTable(command)
     end
 end
 
+local function ToBoolean(str)
+    if type(str) == 'number' then str = tostring(str) end
+    str = string.lower(str)
+
+    local boolTables = {
+        ['1'] = true,
+        ['true'] = true,
+
+        ['0'] = false,
+        ['false'] = false,
+    }
+
+    if boolTables[str] ~= nil then
+        return boolTables[str], nil
+    else
+        return false, GErrorInvalidArguments
+    end
+end
+
 Utilities.GetColour = GetColour
 Utilities.FileToJSON = FileToJSON
 Utilities.JSONToFile = JSONToFile
@@ -139,5 +158,6 @@ Utilities.ConvertColour = ConvertColour
 Utilities.ParseCommand = ParseCommand
 Utilities.GetCommands = GetCommands
 Utilities.AddCommandTable = AddCommandTable
+Utilities.ToBoolean = ToBoolean
 
 return Utilities
