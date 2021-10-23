@@ -107,13 +107,13 @@ end
 
 local function ValidateClientData(clientID)
     local client = connections[clientID]
-    local clientData = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
-    local clientDataTemp = DeepCopy(clientData)
+    local database = Utilities.FileToJSON('Addons/VK/Server/Clients.json')
     for extension, _ in pairs(GExtensions) do
         if GExtensions[extension].CreateClientData then clientDataTemp = GExtensions[extension].CreateClientData(GClients[clientID]) end
     end
 
     local valid = true
+    local exists = false
 
     local clientSecret
     local clientIP
@@ -126,21 +126,23 @@ local function ValidateClientData(clientID)
         clientIP = connections[clientID]:getIpAddr()
     end
 
-    for key, _ in pairs(clientDataTemp) do
-        if not clientData[clientSecret .. ':' .. clientIP][key] then
+    for key, _ in pairs(database) do
+        if not database[clientSecret .. ':' .. clientIP][key] then
             GWLog('Data [%s] missing from client: %s', key, client:getName())
             valid = false
         end
+
+        exists = true
     end
 
-    clientData[clientSecret .. ':' .. clientIP] = clientDataTemp
+    database[clientSecret .. ':' .. clientIP] = {}
 
     if not valid then
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
-        file:write(JSON.encode(clientData))
+        file:write(JSON.encode(database))
         file:close()
 
-        GILog('Fixed Database For: [%s] - %s', client:getName(), client:getSecret())
+        GILog('Fixed Database For: [%s] - %s', client:getName(), client:getSecret()) else GILog('Added "%s" to Database', client:getName())
     end
 end
 
@@ -154,9 +156,11 @@ local function RegisterClient(clientID)
     if GBeamMPCompat then
         clientSecret = MP.GetPlayerHWID()
         clientIP = MP.GetPlayerIdentifiers(clientID)['ip']
+        clientName = 0
     else
         clientSecret = connections[clientID]:getSecret()
         clientIP = connections[clientID]:getIpAddr()
+        clientName = connections[clientID]:getName()
     end
 
     --[[ Add New User to Database ]]--
@@ -171,10 +175,13 @@ local function RegisterClient(clientID)
         local file = io.open('Addons/VK/Server/Clients.json', 'w+')
         file:write(JSON.encode(clientData))
         file:close()
+
+        GILog('Added "%s" to Database', clientName)
+    else
+        ValidateClientData(clientID)
     end
 
     --[[ Generate Client Table ]]--
-    ValidateClientData(clientID)
     GenerateClient(clientID)
     for extension, _ in pairs(GExtensions) do
         if GExtensions[extension].GenerateClient then
