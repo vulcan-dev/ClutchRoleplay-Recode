@@ -43,7 +43,7 @@ Command.Execute = function(executor, arguments)
     if tonumber(rank) == VKUtilities.RankConsole or string.lower(rank) == 'console' then return 'You cannot set this user\'s rank to Console' end
 
     Server.DisplayDialogSuccess(client, string.format('[Moderation] %s has set your rank to %s', executor.udata:getName(), outStr), Server.GetStatusColour('Success'))
-    Server.DisplayDialogSuccess(executor, string.format('Successfully set %s\'s role to: %s', client.GetName(), outStr))
+    Server.DisplayDialogSuccess(executor, string.format('Successfully set %s role to: %s', client.GetName(), outStr))
     client.EditKey('Rank', tonumber(rank))
 end
 

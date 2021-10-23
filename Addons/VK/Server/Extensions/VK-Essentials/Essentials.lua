@@ -18,7 +18,7 @@ local function GenerateClient(client)
     client.GetPlaytime = function() return client.GetKey('Playtime') end
     client.GetVehicleLimit = function() return client.GetKey('VehicleLimit') end
     client.GetBanned = function() for k, v in pairs(client.GetKey('Bans')) do if v.Length > 0 then return v end end return nil end
-    client.GetMuted = function() for k, v in pairs(client.GetKey('Mutes')) do if v.Length > 0 then return v end end return nil end
+    client.GetMuted = function() if client.GetKey('Mutes') then for k, v in pairs(client.GetKey('Mutes')) do if v.Length > 0 then return v end end return nil end end
     client.GetAliases = function() return client.GetKey('Aliases') end
     client.GetWarnings = function() return client.GetKey('Warnings') end
 
@@ -111,10 +111,30 @@ end
 local nu_clientPlaytime = 0
 local function UpdateClientPlaytime()
     if os.time() > nu_clientPlaytime then
-        nu_clientPlaytime = os.time() + 1
+        nu_clientPlaytime = os.time() + 5
         for _, client in pairs(GClients) do
             if client:GetID() ~= GConsoleID and client.connected then
-                client.SetPlaytime(client.GetPlaytime() + 1)
+                client.SetPlaytime(client.GetPlaytime() + 5)
+            end
+        end
+    end
+end
+
+local nu_clientMute = 0
+local function UpdateClientMute()
+    if os.time() > nu_clientMute then
+        nu_clientMute = os.time() + 1
+        for _, client in pairs(GClients) do
+            local mute = client.GetMuted()
+            if mute then
+                if mute.Length > 0 then
+                    if mute.Length <= os.time() then
+                        local mutes = client.GetKey('Mutes')
+                        mutes[tostring(mute.ID)].Length = 0
+                        client.EditKey('Mutes', mutes)
+                        Server.DisplayDialogSuccess(client, 'You have been unmuted by console: time is up')
+                    end
+                end
             end
         end
     end
@@ -125,5 +145,6 @@ Essentials.GenerateClient = GenerateClient
 Essentials.CreateClientData = CreateClientData
 Essentials.Callbacks = Callbacks
 Essentials.UpdateClientPlaytime = UpdateClientPlaytime
+Essentials.UpdateClientMute = UpdateClientMute
 
 return Essentials

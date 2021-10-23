@@ -91,7 +91,8 @@ local function OnChat(clientID, message)
             end
         end
     else
-        local mute = client.GetMuted()
+        local mute
+        if client.GetID() ~= GConsoleID then mute = client.GetMuted() else mute = false end
         if mute then
             if mute.Length > 0 then
                 if mute.Length <= os.time() then
@@ -112,6 +113,7 @@ end
 
 local function OnTick()
     GExtensions['VK-Essentials'].UpdateClientPlaytime()
+    GExtensions['VK-Essentials'].UpdateClientMute()
 end
 
 Callbacks['OnPlayerConnected'] = OnPlayerConnected
