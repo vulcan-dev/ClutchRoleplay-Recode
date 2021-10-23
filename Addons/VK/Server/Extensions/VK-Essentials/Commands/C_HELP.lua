@@ -96,7 +96,7 @@ Command.Execute = function(executor, arguments)
         Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
     end end
-    
+
     if command and command.Description and command.Usage and executor.GetRank() >= command.Rank then
         local output = 'Category: ' .. VKUtilities.StrCategories[command.Category]
         output = output .. '\nDescription: ' .. command.Description

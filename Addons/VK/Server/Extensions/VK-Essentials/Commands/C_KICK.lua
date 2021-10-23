@@ -21,6 +21,8 @@ Command.Execute = function(executor, arguments)
 
     if client.mid == GConsoleID then GWLog('%s tried to kick you.', executor.GetName()) return 'You cannot kick console' end
 
+    client.AddKick(executor, reason)
+
     client.Kick(reason)
     Server.DisplayDialogSuccess(executor, string.format('You kicked: %s', client.GetName()))
 end

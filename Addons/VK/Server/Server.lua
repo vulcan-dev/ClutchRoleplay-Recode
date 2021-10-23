@@ -208,9 +208,11 @@ local function SendChatMessage(client, message, colour)
 
     if type(client) == 'string' then
         for _, client in pairs(GClients) do
-            client.SendLua('kissui.add_message(' .. Utilities.LuaStringEscape(message) .. ', {r=' ..
-            tostring(colour.r) .. ",g=" .. tostring(colour.g) .. ",b=" ..
-            tostring(colour.b) .. ",a=1})", message)
+            if client.GetID() ~= GConsoleID then
+                client.SendLua('kissui.add_message(' .. Utilities.LuaStringEscape(message) .. ', {r=' ..
+                tostring(colour.r) .. ",g=" .. tostring(colour.g) .. ",b=" ..
+                tostring(colour.b) .. ",a=1})", message)
+            end
         end
     else
         client.SendLua('kissui.add_message(' .. Utilities.LuaStringEscape(message) .. ', {r=' ..

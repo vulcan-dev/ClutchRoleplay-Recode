@@ -62,6 +62,19 @@ local function GenerateClient(client)
 
     client.AddAlias = function(name) local aliases = client.GetKey('Aliases') table.insert(aliases, name) client.EditKey('Aliases', aliases) end
 
+    client.AddKick = function(executor, reason)
+        local kicks = client.GetKey('Kicks')
+        local kickCount = TableLength(kicks)
+        kickCount = kickCount + 1
+
+        kicks[tostring(kickCount)] = {
+            KickedBy = executor.GetName(),
+            Date = os.date('%Y-%m-%d %H:%M:%S'),
+            Reason = reason,
+            ID = kickCount
+        }
+    end
+
     client.AddWarn = function(executor, reason)
         local warns = client.GetKey('Warnings')
         local warnCount = TableLength(warns)
@@ -69,6 +82,7 @@ local function GenerateClient(client)
 
         warns[tostring(warnCount)] = {
             WarnedBy = executor.GetName(),
+            Date = os.date('%Y-%m-%d %H:%M:%S'),
             Reason = reason,
             ID = warnCount
         }
