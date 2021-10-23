@@ -3,7 +3,7 @@ local Command = {}
 local VKUtilities = Include('Addons.VK.Server.Extensions.VK-Essentials.Utilities')
 
 Command.Rank = VKUtilities.RankAdmin
-Command.Category = VKUtilities.CategoryAntiCheat
+Command.Category = VKUtilities.CategoryUtilities
 Command.Description = 'Enable/Disable Teleporting'
 Command.Usage = '/set_teleport <1:0>'
 Command.Alias = 'set_tp'

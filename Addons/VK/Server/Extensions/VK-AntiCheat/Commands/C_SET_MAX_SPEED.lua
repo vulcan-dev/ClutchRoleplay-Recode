@@ -3,7 +3,7 @@ local Command = {}
 local VKUtilities = Include('Addons.VK.Server.Extensions.VK-Essentials.Utilities')
 
 Command.Rank = VKUtilities.RankAdmin
-Command.Category = VKUtilities.CategoryAntiCheat
+Command.Category = VKUtilities.CategoryUtilities
 Command.Description = 'Set vehicle max speed'
 Command.Usage = '/set_max_speed <mph>'
 Command.Alias = 'sms'

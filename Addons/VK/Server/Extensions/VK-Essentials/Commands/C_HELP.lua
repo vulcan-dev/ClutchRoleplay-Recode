@@ -60,6 +60,8 @@ Command.Execute = function(executor, arguments)
         extension = tostring(arguments[1])
         category = tostring(arguments[2])
 
+        GDLog('Extension: %s', extensions[tonumber(extension)])
+
         --[[ Look for Extension ]]--
         if not extensions[tonumber(extension)] then return 'Invalid Extension Provided (Do /help)' end
     end
@@ -74,9 +76,11 @@ Command.Execute = function(executor, arguments)
     end
     table.sort(categories, function(a, b) return a > b end)
 
+    GDLog('Category: %s', categories[tonumber(category)])
+
     if (not command and extension ~= 'nil') and categories[tonumber(category)] then
         local output = 'Commands for Category: ' .. VKUtilities.StrCategories[tonumber(category)] .. '\n'
-        for commandName, command in pairs(GCommands) do
+        for commandName, command in pairs(GExtensions[extensions[tonumber(extension)]].Commands) do
             if command.Category == tonumber(category) and executor.GetRank() >= command.Rank then
                 output = output .. '\nCommand: ' .. commandName
                 output = output .. '\nDescription: ' .. command.Description
@@ -86,7 +90,7 @@ Command.Execute = function(executor, arguments)
 
         Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
-    else if (not command and extension ~= 'nil') and category == 'nil' then
+    elseif (not command and extension ~= 'nil') and category == 'nil' then
         --[[ Display Categories ]]--
         local output = 'Categories:\n'
         for index, category in pairs(categories) do
@@ -95,7 +99,7 @@ Command.Execute = function(executor, arguments)
 
         Server.SendChatMessage(executor, output, Server.GetStatusColour('Information'))
         return
-    end end
+    end
 
     if command and command.Description and command.Usage and executor.GetRank() >= command.Rank then
         local output = 'Category: ' .. VKUtilities.StrCategories[command.Category]

@@ -9,8 +9,8 @@ local function Initialize()
     AntiCheat.Config = Utilities.FileToJSON('Addons/VK/Server/Extensions/VK-AntiCheat/Settings/Config.json')
 
     --[[ Initialize all Commmands ]]--
-    local commands = Utilities.GetCommands('VK-AntiCheat')
-    Utilities.AddCommandTable(commands)
+    AntiCheat.Commands = Utilities.GetCommands('VK-AntiCheat')
+    Utilities.AddCommandTable(AntiCheat.Commands)
 end
 
 local function CreateClientData(client)

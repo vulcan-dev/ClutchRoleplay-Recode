@@ -27,7 +27,7 @@ local CategoryModeration = 1
 
 local StrCategories = {
     [CategoryUtilities] = 'Utilities',
-    [CategoryModeration] = 'Moderation'
+    [CategoryModeration] = 'Moderation',
 }
 
 --[[ Helper Functions ]]--

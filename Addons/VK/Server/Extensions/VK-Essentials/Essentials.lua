@@ -7,8 +7,8 @@ Essentials.Utilities = Include('Addons.VK.Server.Extensions.VK-Essentials.Utilit
 
 local function Initialize()
     --[[ Initialize all Commmands ]]--
-    local commands = Utilities.GetCommands('VK-Essentials')
-    Utilities.AddCommandTable(commands)
+    Essentials.Commands = Utilities.GetCommands('VK-Essentials')
+    Utilities.AddCommandTable(Essentials.Commands)
     GDLog('VK-Essentials Initialized')
 end
 
